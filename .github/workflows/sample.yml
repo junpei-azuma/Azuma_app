@@ -9,8 +9,7 @@ on:
 jobs:
   print-hello-world:
     runs-on: ubuntu-20.04
-    container: 
-      image: python3.8-buster
+    container: python3.8-buster
     steps:
       - name: install modules
         run: |
