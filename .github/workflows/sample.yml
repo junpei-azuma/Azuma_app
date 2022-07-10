@@ -10,7 +10,7 @@ jobs:
   print-hello-world:
     runs-on: ubuntu-20.04
     container: 
-      image: python3.8.10
+      image: python3.8-buster
     steps:
       - name: install modules
         run: |
