@@ -1,3 +1,3 @@
+import os
 import sys
-sys.path.append("project.notice_pressure.app")
-print(sys.path)
+sys.path.append('notice_pressure.app')
