@@ -1,0 +1,14 @@
+
+name: "Action Sample"
+
+on:
+  push:
+
+  workflow_dispatch:
+
+jobs:
+  print-hello-world:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: execute echo command
+        run: echo "Hello world!"
