@@ -1,5 +1,5 @@
 
-name: "Action Sample"
+name: Action Sample
 
 on:
   push:
@@ -9,6 +9,13 @@ on:
 jobs:
   print-hello-world:
     runs-on: ubuntu-20.04
+    container: 
+      image: python3.8.10
     steps:
-      - name: execute echo command
-        run: echo "Hello world!"
+      - name: install modules
+        run: |
+          pip install pytest=6.2.5
+          pip install Flask=1.0.2
+      - name: unit test
+        run: |
+          pytest
