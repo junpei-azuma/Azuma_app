@@ -21,6 +21,7 @@ jobs:
           pip install Flask==1.0.2
           pip install python-dotenv==0.19.2
           pip install Jinja2==3.0.1
+          pip install itsdangerous==2.0.1
           pip list
       - name: unit test
         run:
