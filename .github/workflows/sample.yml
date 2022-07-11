@@ -11,10 +11,11 @@ jobs:
     runs-on: ubuntu-20.04
     container: python
     steps:
+      - uses: actions/checkout@v2
       - name: install modules
         run: |
           pip install pytest==6.2.5
           pip install Flask==1.0.2
       - name: unit test
-        run: |
+        run:
           pytest
