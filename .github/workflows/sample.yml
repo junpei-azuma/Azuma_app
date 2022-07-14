@@ -7,6 +7,21 @@ on:
   workflow_dispatch:
 
 jobs:
+  static-analysis:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+      - uses: actions/checkout@v2
+      - name: install modules
+        run: |
+          pip install flake8==4.0.1
+      - name: exec static-analysis
+        run:
+          flake8 notice_pressure
+
   exec-unit-test:
     runs-on: ubuntu-20.04
     env:
