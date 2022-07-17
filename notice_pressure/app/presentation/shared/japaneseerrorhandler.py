@@ -1,7 +1,7 @@
 from cerberus.errors import BasicErrorHandler
 
+
 class JapaneseErrorHandler(BasicErrorHandler):
-    
     def __init__(self, tree=None):
         super(JapaneseErrorHandler, self).__init__(tree)
         self.messages = {
@@ -40,5 +40,5 @@ class JapaneseErrorHandler(BasicErrorHandler):
             0x91: "ひとつまたは複数の定義を有効です",
             0x92: "ゼロもしくは複数のルールの検証です",
             0x93: "定義されていない検証です",
-            0x94: "1つまたは複数の定義が検証されません"
+            0x94: "1つまたは複数の定義が検証されません",
         }
