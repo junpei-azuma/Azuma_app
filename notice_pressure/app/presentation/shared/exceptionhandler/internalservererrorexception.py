@@ -1,6 +1,7 @@
 from http.client import INTERNAL_SERVER_ERROR
 from flask import jsonify
 
+
 class InternalServerErrorException(Exception):
     """内部エラーのハンドラー
 
@@ -9,7 +10,8 @@ class InternalServerErrorException(Exception):
 
     Returns:
         _type_: エラーレスポンス
-    """    
+    """
+
     @staticmethod
     def response(e):
         """エラーレスポンスを返す
@@ -19,8 +21,8 @@ class InternalServerErrorException(Exception):
 
         Returns:
             _type_: レスポンスのjson
-        """        
-        return jsonify({
-            'code' : INTERNAL_SERVER_ERROR,
-            'msg': e.description
-        }), INTERNAL_SERVER_ERROR
+        """
+        return (
+            jsonify({"code": INTERNAL_SERVER_ERROR, "msg": e.description}),
+            INTERNAL_SERVER_ERROR,
+        )
