@@ -15,7 +15,7 @@ def create_app():
 
     load_dotenv()
     app = Flask(__name__)
-    
+
     if os.getenv("FLASK_CONFIG"):
         app.config.from_envvar("FLASK_CONFIG")
 
