@@ -1,7 +1,5 @@
 from datetime import datetime
 from typing import List
-
-from pyrsistent import PRecord
 from app.pressure import DailyPressure, Pressure
 
 
