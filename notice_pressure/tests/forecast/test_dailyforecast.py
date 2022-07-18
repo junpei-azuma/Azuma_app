@@ -54,7 +54,7 @@ def test_配列に要素追加():
     forecastlist: List[Forecast] = [forecast]
     dailyforecast: DailyForecast = DailyForecast(forecastlist)
 
-    # 事前準備3: Forecastインスタンスを追加
+    # 操作： Forecastインスタンスを追加
     added_dailyforecast: DailyForecast = dailyforecast.add(added_forecast)
 
     # 想定結果： 2つの要素を持つ配列が作成されている
