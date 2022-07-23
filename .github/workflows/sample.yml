@@ -68,6 +68,8 @@ jobs:
           pip install pytz==2021.3
       - name: integration test
         run:
+          import os
+          print(os.environ)
           pytest notice_pressure/tests/integration
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
