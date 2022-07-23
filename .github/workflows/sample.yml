@@ -45,4 +45,4 @@ jobs:
           pip install pytz==2021.3
       - name: unit test
         run:
-          pytest
+          pytest notice_pressure/tests/unit
