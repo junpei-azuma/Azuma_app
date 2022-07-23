@@ -67,7 +67,7 @@ jobs:
           pip install requests==2.21.0
           pip install pytz==2021.3
       - name: integration test
-        run: 
+        run: |
           export OPEN_WEATHER_API_TOKEN=$env.OPEN_WEATHER_API_TOKEN
           pytest notice_pressure/tests/integration
         env:
