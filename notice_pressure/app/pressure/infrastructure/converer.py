@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Final, List
 
+from pytz import timezone
+
 # openweatherAPIから返ってくる値は固定であり、keyの抜け落ちは無いと想定する。
 # そのため、例外処理は実装しない
 
@@ -39,7 +41,9 @@ class Converter:
         """
         converted_list: Final[List] = [
             {
-                "dt": datetime.fromtimestamp(element["dt"]).strftime("%Y%m%d%H%M"),
+                "dt": datetime.fromtimestamp(
+                    element["dt"], timezone("Asia/Tokyo")
+                ).strftime("%Y%m%d%H%M"),
                 "pressure": element["pressure"],
             }
             for element in extracted_list
