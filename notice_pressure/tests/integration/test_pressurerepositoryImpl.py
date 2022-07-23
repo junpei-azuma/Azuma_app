@@ -1,5 +1,12 @@
 from datetime import datetime, timedelta
-from http.client import BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, OK
+from http.client import (
+    BAD_REQUEST,
+    FORBIDDEN,
+    INTERNAL_SERVER_ERROR,
+    NOT_FOUND,
+    OK,
+    UNAUTHORIZED,
+)
 import os
 from typing import List
 from unittest import mock
@@ -63,6 +70,25 @@ def test_OpenweatherAPIの呼び出し失敗_403エラー(mocker):
         repository.get_tomorrow_list()
 
     assert str(e.value) == "認証に失敗しました。"
+
+
+def test_OpenweatherAPIの呼び出し失敗_401エラー(mocker):
+    # 事前準備：呼び出し用のモック作成
+
+    repository: PressureRepository = PressureRepositoryImpl()
+    response_mock = mock.Mock(spec=Response)
+    response_mock.status_code = UNAUTHORIZED
+
+    mocker.patch.object(
+        repository,
+        "call_openweather_api",
+        return_value=response_mock,
+    )
+
+    with pytest.raises(RuntimeError) as e:
+        repository.get_tomorrow_list()
+
+    assert str(e.value) == "認証情報が不正です。"
 
 
 def test_OpenweatherAPIの呼び出し失敗_500エラー(mocker):

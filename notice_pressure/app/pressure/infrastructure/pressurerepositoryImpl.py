@@ -1,5 +1,11 @@
 from datetime import datetime
-from http.client import BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, OK
+from http.client import (
+    BAD_REQUEST,
+    FORBIDDEN,
+    INTERNAL_SERVER_ERROR,
+    NOT_FOUND,
+    UNAUTHORIZED,
+)
 import os
 from typing import Final, List
 import json
@@ -47,6 +53,9 @@ class PressureRepositoryImpl(PressureRepository):
 
         if response.status_code == FORBIDDEN:
             raise RuntimeError("認証に失敗しました。")
+
+        if response.status_code == UNAUTHORIZED:
+            raise RuntimeError("認証情報が不正です。")
 
         if response.status_code == INTERNAL_SERVER_ERROR:
             raise RuntimeError("OpenWeatherAPIの不具合です。")
