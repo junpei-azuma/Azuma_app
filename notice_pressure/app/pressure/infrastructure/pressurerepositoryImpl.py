@@ -1,10 +1,14 @@
+from datetime import datetime
 from http.client import OK
 import os
-from typing import Final
+from typing import Final, List
+import json
 
 from requests import Response
 import requests
-from .pressurerepository import PressureRepository
+
+from .converer import Converter
+from ..pressurerepository import PressureRepository
 
 
 class PressureRepositoryImpl(PressureRepository):
@@ -31,6 +35,13 @@ class PressureRepositoryImpl(PressureRepository):
         )
         if self.request_fail(response):
             raise RuntimeError("気圧情報の取得に失敗しました。")
+
+        response_object: dict = json.loads(response.text)
+
+        extracted_list: Final[List] = Converter.extract(response_object)
+        timeconveted_list: Final[List] = Converter.convert_unixtime(extracted_list)
+
+        return timeconveted_list
 
     @staticmethod
     def request_fail(response: Response) -> bool:
