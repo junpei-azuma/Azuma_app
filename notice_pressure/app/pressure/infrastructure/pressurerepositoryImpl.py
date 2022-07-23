@@ -1,5 +1,5 @@
 from datetime import datetime
-from http.client import OK
+from http.client import BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, OK
 import os
 from typing import Final, List
 import json
@@ -29,12 +29,27 @@ class PressureRepositoryImpl(PressureRepository):
     def longitude(self) -> float:
         return self.__longitude
 
-    def get_tomorrow_list(self) -> list:
+    def call_openweather_api(self) -> Response:
         response: Response = requests.get(
             f"https://api.openweathermap.org/data/2.5/onecall?lat={self.latitude}&lon={self.longitude}&appid={self.api_token}&lang=ja&exclude=minutely,daily,current,alerts"
         )
-        if self.request_fail(response):
-            raise RuntimeError("気圧情報の取得に失敗しました。")
+        return response
+
+    def get_tomorrow_list(self) -> list:
+
+        response: Response = self.call_openweather_api()
+
+        if response.status_code == NOT_FOUND:
+            raise RuntimeError("リクエスト先URLが存在しません。")
+
+        if response.status_code == BAD_REQUEST:
+            raise RuntimeError("パラメータが不正です。")
+
+        if response.status_code == FORBIDDEN:
+            raise RuntimeError("認証に失敗しました。")
+
+        if response.status_code == INTERNAL_SERVER_ERROR:
+            raise RuntimeError("OpenWeatherAPIの不具合です。")
 
         response_object: dict = json.loads(response.text)
 
@@ -42,15 +57,3 @@ class PressureRepositoryImpl(PressureRepository):
         timeconveted_list: Final[List] = Converter.convert_unixtime(extracted_list)
 
         return timeconveted_list
-
-    @staticmethod
-    def request_fail(response: Response) -> bool:
-        """外部API呼び出しが失敗したか判定する
-
-        Args:
-            response (Response): レスポンスオブジェクト
-
-        Returns:
-            bool: 真偽値
-        """
-        return response.status_code != OK

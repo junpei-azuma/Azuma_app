@@ -1,40 +1,87 @@
 from datetime import datetime, timedelta
-from http.client import OK
+from http.client import BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, OK
 import os
-from time import strftime, strptime, time
 from typing import List
+from unittest import mock
 import pytest
 from requests import Response
 from app.pressure import PressureRepositoryImpl, PressureRepository
 
 
-def test_リクエストが成功():
-    response: Response = Response()
-    response.status_code = OK
-
-    assert not PressureRepositoryImpl.request_fail(response)
-
-
-@pytest.mark.parametrize("status", [400, 404, 403, 500])
-def test_リクエストが失敗(status: int):
-    response: Response = Response()
-    response.status_code = status
-
-    assert PressureRepositoryImpl.request_fail(response)
-
-
-@pytest.mark.parametrize("response_status_code", [400, 404, 403, 500, 503])
-def test_OpenweatherAPIの呼び出し失敗(response_status_code: int, mocker):
+def test_OpenweatherAPIの呼び出し失敗_400エラー(mocker):
     # 事前準備：呼び出し用のモック作成
 
     repository: PressureRepository = PressureRepositoryImpl()
+    response_mock = mock.Mock(spec=Response)
+    response_mock.status_code = BAD_REQUEST
 
-    mocker.patch.object(repository, "request_fail", return_value=response_status_code)
+    mocker.patch.object(
+        repository,
+        "call_openweather_api",
+        return_value=response_mock,
+    )
 
     with pytest.raises(RuntimeError) as e:
         repository.get_tomorrow_list()
 
-    assert str(e.value) == "気圧情報の取得に失敗しました。"
+    assert str(e.value) == "パラメータが不正です。"
+
+
+def test_OpenweatherAPIの呼び出し失敗_404エラー(mocker):
+    # 事前準備：呼び出し用のモック作成
+
+    repository: PressureRepository = PressureRepositoryImpl()
+    response_mock = mock.Mock(spec=Response)
+    response_mock.status_code = NOT_FOUND
+
+    mocker.patch.object(
+        repository,
+        "call_openweather_api",
+        return_value=response_mock,
+    )
+
+    with pytest.raises(RuntimeError) as e:
+        repository.get_tomorrow_list()
+
+    assert str(e.value) == "リクエスト先URLが存在しません。"
+
+
+def test_OpenweatherAPIの呼び出し失敗_403エラー(mocker):
+    # 事前準備：呼び出し用のモック作成
+
+    repository: PressureRepository = PressureRepositoryImpl()
+    response_mock = mock.Mock(spec=Response)
+    response_mock.status_code = FORBIDDEN
+
+    mocker.patch.object(
+        repository,
+        "call_openweather_api",
+        return_value=response_mock,
+    )
+
+    with pytest.raises(RuntimeError) as e:
+        repository.get_tomorrow_list()
+
+    assert str(e.value) == "認証に失敗しました。"
+
+
+def test_OpenweatherAPIの呼び出し失敗_500エラー(mocker):
+    # 事前準備：呼び出し用のモック作成
+
+    repository: PressureRepository = PressureRepositoryImpl()
+    response_mock = mock.Mock(spec=Response)
+    response_mock.status_code = INTERNAL_SERVER_ERROR
+
+    mocker.patch.object(
+        repository,
+        "call_openweather_api",
+        return_value=response_mock,
+    )
+
+    with pytest.raises(RuntimeError) as e:
+        repository.get_tomorrow_list()
+
+    assert str(e.value) == "OpenWeatherAPIの不具合です。"
 
 
 def test_OpenweatherAPIの呼び出し成功():
