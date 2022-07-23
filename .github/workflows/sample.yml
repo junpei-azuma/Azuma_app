@@ -50,11 +50,6 @@ jobs:
   # 外部モジュールに依存するテストは時間がかかるため、総実行時間を減らすためにユニットテストと並行して実行する        
   exec-integration-test:
     runs-on: ubuntu-20.04
-    env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      OPEN_WEATHER_API_TOKEN: ${{ secrets.OPEN_WEATHER_API_TOKEN }}
-      JSON_AS_ASCII: False
-      TESTING: True
     steps:
       - uses: actions/setup-python@v2
         with:
@@ -74,4 +69,9 @@ jobs:
       - name: integration test
         run:
           pytest notice_pressure/tests/integration
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          OPEN_WEATHER_API_TOKEN: ${{ secrets.OPEN_WEATHER_API_TOKEN }}
+          JSON_AS_ASCII: False
+          TESTING: True
   
