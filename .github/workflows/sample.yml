@@ -41,7 +41,7 @@ jobs:
           pip install python-dotenv==0.19.2
           pip install Jinja2==3.0.1
           pip install itsdangerous==2.0.1
-          pip list
+          pip install requests==2.21.0
       - name: unit test
         run:
           pytest

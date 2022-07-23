@@ -6,5 +6,7 @@ class PressureDto:
     ドメイン層で扱えるオブジェクトに加工する
     ※ オブジェクトからjsonへの加工は不要
     """
+
     @staticmethod
-    def to_entity(response: Response) -> 
+    def to_entity(response: Response) -> None:
+        pass
