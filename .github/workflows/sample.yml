@@ -67,7 +67,7 @@ jobs:
           pip install requests==2.21.0
           pip install pytz==2021.3
       - name: integration test
-        run:
+        run: |
           import os
           print(os.environ)
           pytest notice_pressure/tests/integration
