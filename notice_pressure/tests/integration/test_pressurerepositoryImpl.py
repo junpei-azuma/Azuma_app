@@ -111,12 +111,17 @@ def test_OpenweatherAPIの呼び出し失敗_500エラー(mocker):
 
 
 def test_OpenweatherAPIの呼び出し成功():
-    # 事前準備： 現在時刻と48時間後の時刻(時まで)を定義
+    # 事前準備： 明日の午前6時と21時を定義する
     # 0分が取得されるので、現在時刻は0分とする
-    now: str = datetime.now().strftime("%Y%m%d%H00")
 
-    two_days_later: str = (datetime.now() + timedelta(hours=47)).strftime("%Y%m%d%H00")
-
+    tommorw_AM0600: str = (
+        datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        + timedelta(days=1, hours=6)
+    ).strftime("%Y%m%d%H00")
+    tomorrow_PM2100: str = (
+        datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        + timedelta(days=1, hours=21)
+    ).strftime("%Y%m%d%H00")
     respository: PressureRepository = PressureRepositoryImpl()
 
     # 操作： OpenweatherAPIを呼び出し
@@ -126,6 +131,6 @@ def test_OpenweatherAPIの呼び出し成功():
     assert isinstance(response, list)
 
     # 現在時刻 ~ 48時間後まで取得される
-    assert response[0]["dt"] == now
-    assert response[-1]["dt"] == two_days_later
+    assert response[0]["dt"] == tommorw_AM0600
+    assert response[-1]["dt"] == tomorrow_PM2100
     assert len(response) == 6
