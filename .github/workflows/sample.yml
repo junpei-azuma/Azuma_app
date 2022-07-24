@@ -68,11 +68,11 @@ jobs:
           pip install pytz==2021.3
       - name: integration test
         run: |
-          echo "$SECRET_KEY"
           pytest notice_pressure/tests/integration
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           OPEN_WEATHER_API_TOKEN: ${{ secrets.OPEN_WEATHER_API_TOKEN }}
           JSON_AS_ASCII: False
           TESTING: True
+          TZ: 'Asia/Tokyo'
   
