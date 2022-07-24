@@ -41,7 +41,38 @@ jobs:
           pip install python-dotenv==0.19.2
           pip install Jinja2==3.0.1
           pip install itsdangerous==2.0.1
-          pip list
+          pip install requests==2.21.0
+          pip install pytz==2021.3
       - name: unit test
         run:
-          pytest
+          pytest notice_pressure/tests/unit
+
+  # 外部モジュールに依存するテストは時間がかかるため、総実行時間を減らすためにユニットテストと並行して実行する        
+  exec-integration-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+      - uses: actions/checkout@v2
+      - name: install modules
+        run: |
+          pip install pytest==6.2.5
+          pip install pytest-mock==3.7.0
+          pip install Flask==1.0.2
+          pip install python-dotenv==0.19.2
+          pip install Jinja2==3.0.1
+          pip install itsdangerous==2.0.1
+          pip install requests==2.21.0
+          pip install pytz==2021.3
+      - name: integration test
+        run: |
+          pytest notice_pressure/tests/integration
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          OPEN_WEATHER_API_TOKEN: ${{ secrets.OPEN_WEATHER_API_TOKEN }}
+          JSON_AS_ASCII: False
+          TESTING: True
+          TZ: 'Asia/Tokyo'
+  
