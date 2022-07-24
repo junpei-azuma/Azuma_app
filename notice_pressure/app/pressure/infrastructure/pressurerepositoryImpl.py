@@ -64,5 +64,11 @@ class PressureRepositoryImpl(PressureRepository):
 
         extracted_list: Final[List] = Converter.extract(response_object)
         timeconveted_list: Final[List] = Converter.convert_unixtime(extracted_list)
-
-        return timeconveted_list
+        # 実行日時翌日の06,09,12,15,18,21時のデータのみを抽出する。
+        filterd_by_datetime_list: Final[List] = Converter.filter_by_datetime(
+            timeconveted_list
+        )
+        filterd_by_time_list: Final[List] = Converter.filter_by_time(
+            filterd_by_datetime_list
+        )
+        return filterd_by_time_list

@@ -128,4 +128,4 @@ def test_OpenweatherAPIの呼び出し成功():
     # 現在時刻 ~ 48時間後まで取得される
     assert response[0]["dt"] == now
     assert response[-1]["dt"] == two_days_later
-    assert len(response) == 48
+    assert len(response) == 6
