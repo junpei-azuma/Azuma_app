@@ -1,27 +1,27 @@
 from datetime import datetime
-from typing import Final
+from typing import Final, Optional
 from app.pressure import Pressure, PressureChange
 
 
 class Forecast:
     def __init__(
         self,
-        target_datetime: datetime,
         pressure: Pressure,
-        pressure_change: PressureChange,
+        pressure_change: Optional[PressureChange],
     ) -> None:
-        self.__target_datetime: Final[datetime] = target_datetime
-        self.__pressure: Final[Pressure] = pressure
-        self.__pressure_change: Final[PressureChange] = pressure_change
+        """インスタンスを作成する
 
-    @property
-    def target_datetime(self) -> datetime:
-        return self.__target_datetime
+        Args:
+            pressure (Pressure): 気圧情報
+            pressure_change (Optional[PressureChange]): 3時間前からの変化(06:00分は3時間前のデータが存在しないためNone)
+        """
+        self.__pressure: Final[Pressure] = pressure
+        self.__pressure_change: Optional[PressureChange] = pressure_change
 
     @property
     def pressure(self) -> Pressure:
         return self.__pressure
 
     @property
-    def pressure_change(self) -> PressureChange:
+    def pressure_change(self) -> Optional[PressureChange]:
         return self.__pressure_change
