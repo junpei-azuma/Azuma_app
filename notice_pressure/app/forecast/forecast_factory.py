@@ -34,9 +34,12 @@ class ForecastFactory:
         Returns:
             _type_: 予報インスタンス
         """
+        try:
+            pressure_change: PressureChange = PressureChange(
+                current_pressure, pressure_3hours_ago
+            )
+        except ValueError:
+            raise ValueError
 
-        pressure_change: PressureChange = PressureChange(
-            current_pressure, pressure_3hours_ago
-        )
         forecast: Forecast = Forecast(current_pressure, pressure_change)
         return forecast
