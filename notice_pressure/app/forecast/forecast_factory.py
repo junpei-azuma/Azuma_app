@@ -1,4 +1,3 @@
-from colorama import Fore
 from app.pressure import Pressure, PressureChange
 from app.forecast import Forecast
 
