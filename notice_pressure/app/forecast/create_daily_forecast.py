@@ -29,17 +29,15 @@ class CreateDailyForecast:
         forecast_list: List[Forecast] = list()
 
         for i, pressure in enumerate(daily_pressure):
-            ## 先頭の要素(AM6時)は3時間前との差分を持たない
+            ## 先頭の要素(AM3時)はスキップする
             if i == 0:
-                forecast: Forecast = ForecastFactory.create_AM06forecast(pressure)
-
-            ## AM09:00以降は3時間前との差分を持つ
-            else:
-                current_pressure: Pressure = pressure
-                pressure_3hours_ago: Pressure = daily_pressure[i - 1]
-                forecast: Forecast = ForecastFactory.create_forecast(
-                    current_pressure, pressure_3hours_ago
-                )
+                continue
+            ## AM06:00以降は3時間前との差分を持つ
+            current_pressure: Pressure = pressure
+            pressure_3hours_ago: Pressure = daily_pressure[i - 1]
+            forecast: Forecast = ForecastFactory.create_forecast(
+                current_pressure, pressure_3hours_ago
+            )
             forecast_list.append(forecast)
 
         daily_forecast: DailyForecast = DailyForecast(forecast_list)

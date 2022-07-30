@@ -30,6 +30,7 @@ def test_インスタンスを生成する():
 def test_Pressureインスタンスから1日分の予報を生成する():
     # 事前準備： Pressureインスタンスのリストを作成する
     daily_pressure: List[Pressure] = [
+        Pressure(datetime(2022, 7, 25, 3, 0, 0), 1001),
         Pressure(datetime(2022, 7, 25, 6, 0, 0), 1000),
         Pressure(datetime(2022, 7, 25, 9, 0, 0), 1005),
         Pressure(datetime(2022, 7, 25, 12, 0, 0), 1001),
@@ -53,7 +54,7 @@ def test_Pressureインスタンスから1日分の予報を生成する():
     isinstance(AM06_forecast, Forecast)
     assert AM06_forecast.pressure.value == 1000
     assert AM06_forecast.pressure.datetime == datetime(2022, 7, 25, 6, 0, 0)
-    assert AM06_forecast.pressure_change is None
+    assert AM06_forecast.pressure_change.calculate() == -1
 
     ## AM09時の予報
     AM09_forecast: Forecast = daily_forecast.forecastlist[1]
@@ -74,6 +75,7 @@ def test_ユースケース_正常系(mocker):
     # 事前準備：ユースケースクラスのインスタンスを作成
     pressurerepository: PressureRepository = mock.MagicMock()
     daily_pressure: List[Pressure] = [
+        Pressure(datetime(2022, 7, 25, 3, 0, 0), 1001),
         Pressure(datetime(2022, 7, 25, 6, 0, 0), 1000),
         Pressure(datetime(2022, 7, 25, 9, 0, 0), 1005),
         Pressure(datetime(2022, 7, 25, 12, 0, 0), 1001),
@@ -98,7 +100,7 @@ def test_ユースケース_正常系(mocker):
     isinstance(AM06_forecast, Forecast)
     assert AM06_forecast.pressure.value == 1000
     assert AM06_forecast.pressure.datetime == datetime(2022, 7, 25, 6, 0, 0)
-    assert AM06_forecast.pressure_change is None
+    assert AM06_forecast.pressure_change.calculate() == -1
 
     ## AM09時の予報
     AM09_forecast: Forecast = daily_forecast.forecastlist[1]
