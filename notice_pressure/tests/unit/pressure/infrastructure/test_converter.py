@@ -83,7 +83,7 @@ def test_レスポンスから翌日のデータのみを抽出():
     assert filterd_by_datetime_list[-1]["pressure"] == 1007
 
 
-# 意図した時間帯(6,9,12,15,18,21時)のデータが取れていることを担保したいため、
+# 意図した時間帯(3,6,9,12,15,18,21時)のデータが取れていることを担保したいため、
 # リストの全データを確認します。
 def test_レスポンスから特定の時間帯のデータを抽出する():
     # 事前準備：レスポンスから明日のデータを抽出する。
@@ -106,22 +106,25 @@ def test_レスポンスから特定の時間帯のデータを抽出する():
     assert isinstance(filterd_by_time_list, list)
 
     # 6,9,12,15,18,21時のデータが取得されている
-    assert len(filterd_by_time_list) == 6
+    assert len(filterd_by_time_list) == 7
 
-    assert filterd_by_time_list[0]["dt"] == "202207230600"
-    assert filterd_by_time_list[0]["pressure"] == 1005
+    assert filterd_by_time_list[0]["dt"] == "202207230300"
+    assert filterd_by_time_list[0]["pressure"] == 1004
 
-    assert filterd_by_time_list[1]["dt"] == "202207230900"
+    assert filterd_by_time_list[1]["dt"] == "202207230600"
     assert filterd_by_time_list[1]["pressure"] == 1005
 
-    assert filterd_by_time_list[2]["dt"] == "202207231200"
+    assert filterd_by_time_list[2]["dt"] == "202207230900"
     assert filterd_by_time_list[2]["pressure"] == 1005
 
-    assert filterd_by_time_list[3]["dt"] == "202207231500"
+    assert filterd_by_time_list[3]["dt"] == "202207231200"
     assert filterd_by_time_list[3]["pressure"] == 1005
 
-    assert filterd_by_time_list[4]["dt"] == "202207231800"
+    assert filterd_by_time_list[4]["dt"] == "202207231500"
     assert filterd_by_time_list[4]["pressure"] == 1005
 
-    assert filterd_by_time_list[5]["dt"] == "202207232100"
-    assert filterd_by_time_list[5]["pressure"] == 1007
+    assert filterd_by_time_list[5]["dt"] == "202207231800"
+    assert filterd_by_time_list[5]["pressure"] == 1005
+
+    assert filterd_by_time_list[6]["dt"] == "202207232100"
+    assert filterd_by_time_list[6]["pressure"] == 1007

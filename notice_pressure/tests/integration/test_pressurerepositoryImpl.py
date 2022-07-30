@@ -4,10 +4,8 @@ from http.client import (
     FORBIDDEN,
     INTERNAL_SERVER_ERROR,
     NOT_FOUND,
-    OK,
     UNAUTHORIZED,
 )
-import os
 from typing import Final, List
 from unittest import mock
 import pytest
@@ -113,7 +111,9 @@ def test_OpenweatherAPIの呼び出し失敗_500エラー(mocker):
 def test_OpenweatherAPIの呼び出し成功():
     # 事前準備： 明日の午前6時と21時を定義する
     # 0分が取得されるので、現在時刻は0分とする
-
+    tommorw_AM0300: datetime = datetime.today().replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ) + timedelta(days=1, hours=3)
     tommorw_AM0600: datetime = datetime.today().replace(
         hour=0, minute=0, second=0, microsecond=0
     ) + timedelta(days=1, hours=6)
@@ -130,6 +130,7 @@ def test_OpenweatherAPIの呼び出し成功():
     assert isinstance(response, list)
 
     # 現在時刻 ~ 48時間後まで取得される
-    assert response[0].datetime == tommorw_AM0600
+    assert response[0].datetime == tommorw_AM0300
+    assert response[1].datetime == tommorw_AM0600
     assert response[-1].datetime == tomorrow_PM2100
-    assert len(response) == 6
+    assert len(response) == 7
