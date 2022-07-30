@@ -17,7 +17,7 @@ class CreateDailyForecast:
                 Pressure
             ] = self.pressurerepository.get_daily_pressure()
         except RuntimeError as e:
-            raise RuntimeError(str(e.value))
+            raise RuntimeError(e)
 
         # 1日分の気圧データから予報データを作成する。
         daily_forecast: DailyForecast = self.hoge(daily_pressure)

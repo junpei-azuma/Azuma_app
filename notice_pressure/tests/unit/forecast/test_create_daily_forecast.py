@@ -1,9 +1,11 @@
 from datetime import datetime
+from http.client import NOT_FOUND
 from typing import List
 from unittest import mock
 from unittest.mock import Mock
 
 import pytest
+from requests import Response
 from app.pressure import PressureRepository, Pressure, PressureRepositoryImpl
 from app.forecast import CreateDailyForecast, DailyForecast, Forecast
 
@@ -109,13 +111,18 @@ def test_ユースケース_正常系(mocker):
 
 def test_ユースケース_異常系(mocker):
     # 事前準備：ユースケースクラスのインスタンスを作成
-    pressurerepository: PressureRepository = mock.MagicMock()
+    pressurerepository: PressureRepository = PressureRepositoryImpl()
+
+    response: Response = Response()
+    response.status_code = NOT_FOUND
     mocker.patch.object(
         pressurerepository,
-        "get_daily_pressure",
-        side_effect=RuntimeError,
+        "call_openweather_api",
+        return_value=response,
     )
     create_daily_forecast: CreateDailyForecast = CreateDailyForecast(pressurerepository)
 
     with pytest.raises(RuntimeError) as e:
-        daily_forecase: DailyForecast = create_daily_forecast.create_forecast()
+        create_daily_forecast.create_forecast()
+
+    assert str(e.value) == "リクエスト先URLが存在しません。"
