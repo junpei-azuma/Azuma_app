@@ -37,6 +37,7 @@ jobs:
       - name: install modules
         run: |
           pip install pytest==6.2.5
+          pip install pytest-mock==3.7.0
           pip install Flask==1.0.2
           pip install python-dotenv==0.19.2
           pip install Jinja2==3.0.1
