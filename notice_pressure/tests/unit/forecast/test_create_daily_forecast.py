@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import List
 from unittest import mock
 from unittest.mock import Mock
+
+import pytest
 from app.pressure import PressureRepository, Pressure, PressureRepositoryImpl
 from app.forecast import CreateDailyForecast, DailyForecast, Forecast
 
@@ -103,3 +105,17 @@ def test_ユースケース_正常系(mocker):
     assert AM12_forecast.pressure.datetime == datetime(2022, 7, 25, 12, 0, 0)
     assert AM12_forecast.pressure.value == 1001
     assert AM12_forecast.pressure_change.calculate() == -4
+
+
+def test_ユースケース_異常系(mocker):
+    # 事前準備：ユースケースクラスのインスタンスを作成
+    pressurerepository: PressureRepository = mock.MagicMock()
+    mocker.patch.object(
+        pressurerepository,
+        "get_daily_pressure",
+        side_effect=RuntimeError,
+    )
+    create_daily_forecast: CreateDailyForecast = CreateDailyForecast(pressurerepository)
+
+    with pytest.raises(RuntimeError) as e:
+        daily_forecase: DailyForecast = create_daily_forecast.create_forecast()
