@@ -15,7 +15,11 @@ def test_ForecastオブジェクトをDTOに変換する():
     )
 
     # 操作： ForeCastDtoインスタンスを生成する。
-    forecast_dto: ForecastDto = ForecastDto(forecast)
+    forecast_dto: ForecastDto = ForecastDto(
+        forecast.pressure.datetime.strftime("%Y%m%d%H%M"),
+        forecast.pressure.value,
+        forecast.pressure_change.calculate(),
+    )
 
     # 想定結果： 正しくインスタンス生成できている
     assert forecast_dto.pressure == 1000

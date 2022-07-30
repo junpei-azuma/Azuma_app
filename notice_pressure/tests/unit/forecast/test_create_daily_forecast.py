@@ -14,6 +14,7 @@ import pytest
 from requests import Response
 from app.pressure import PressureRepository, Pressure, PressureRepositoryImpl
 from app.forecast import CreateDailyForecast, DailyForecast, Forecast
+from app.forecast.forecast_dto import ForecastDto
 
 
 # コンストラクタのテスト
@@ -88,33 +89,33 @@ def test_ユースケース_正常系(mocker):
     create_daily_forecast: CreateDailyForecast = CreateDailyForecast(pressurerepository)
 
     # 操作： 気圧データ生成処理を実行する
-    daily_forecast: DailyForecast = create_daily_forecast.create_forecast()
+    daily_forecast: List[ForecastDto] = create_daily_forecast.create_forecast()
 
     # 想定結果： 正しくインスタンス生成できている
-    assert isinstance(daily_forecast, DailyForecast)
-    assert isinstance(daily_forecast.forecastlist, list)
+    assert isinstance(daily_forecast, list)
 
-    assert len(daily_forecast.forecastlist) == 3
+    assert len(daily_forecast) == 3
     ## AM06時の予報
-    AM06_forecast: Forecast = daily_forecast.forecastlist[0]
-    isinstance(AM06_forecast, Forecast)
-    assert AM06_forecast.pressure.value == 1000
-    assert AM06_forecast.pressure.datetime == datetime(2022, 7, 25, 6, 0, 0)
-    assert AM06_forecast.pressure_change.calculate() == -1
+    AM06_forecast: ForecastDto = daily_forecast[0]
+    isinstance(AM06_forecast, ForecastDto)
+    assert AM06_forecast.pressure == 1000
+    assert AM06_forecast.datetime == "202207250600"
+    assert AM06_forecast.difference == -1
 
     ## AM09時の予報
-    AM09_forecast: Forecast = daily_forecast.forecastlist[1]
-    isinstance(AM09_forecast, Forecast)
-    assert AM09_forecast.pressure.datetime == datetime(2022, 7, 25, 9, 0, 0)
-    assert AM09_forecast.pressure.value == 1005
-    assert AM09_forecast.pressure_change.calculate() == 5
+    AM09_forecast: ForecastDto = daily_forecast[1]
+    isinstance(AM09_forecast, ForecastDto)
+    assert AM09_forecast.datetime == "202207250900"
+    assert AM09_forecast.pressure == 1005
+    assert AM09_forecast.difference == 5
 
     ## AM12時の予報
-    AM12_forecast: Forecast = daily_forecast.forecastlist[2]
-    isinstance(AM12_forecast, Forecast)
-    assert AM12_forecast.pressure.datetime == datetime(2022, 7, 25, 12, 0, 0)
-    assert AM12_forecast.pressure.value == 1001
-    assert AM12_forecast.pressure_change.calculate() == -4
+    AM12_forecast: ForecastDto = daily_forecast[2]
+    isinstance(AM12_forecast, ForecastDto)
+
+    assert AM12_forecast.datetime == "202207251200"
+    assert AM12_forecast.pressure == 1001
+    assert AM12_forecast.difference == -4
 
 
 @pytest.mark.parametrize(

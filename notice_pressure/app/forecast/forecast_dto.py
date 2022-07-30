@@ -1,16 +1,13 @@
-from .forecast import Forecast
-
-
 class ForecastDto:
-    def __init__(self, forecast: Forecast) -> None:
+    def __init__(self, datatime: str, pressure: int, pressure_difference: int) -> None:
         """ドメインオブジェクトをクライアントに公開できる形に変換する。
 
         Args:
             forecast (Forecast): _description_
         """
-        self.__datetime_str: str = forecast.pressure.datetime.strftime("%Y%m%d%H%M")
-        self.__pressure: int = forecast.pressure.value
-        self.__difference: int = forecast.pressure_change.calculate()
+        self.__datetime_str: str = datatime
+        self.__pressure: int = pressure
+        self.__difference: int = pressure_difference
 
     @property
     def datetime(self) -> str:
