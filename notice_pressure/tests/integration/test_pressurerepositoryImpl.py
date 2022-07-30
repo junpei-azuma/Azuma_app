@@ -4,15 +4,13 @@ from http.client import (
     FORBIDDEN,
     INTERNAL_SERVER_ERROR,
     NOT_FOUND,
-    OK,
     UNAUTHORIZED,
 )
-import os
-from typing import List
+from typing import Final, List
 from unittest import mock
 import pytest
 from requests import Response
-from app.pressure import PressureRepositoryImpl, PressureRepository
+from app.pressure import PressureRepositoryImpl, PressureRepository, Pressure
 
 
 def test_OpenweatherAPIの呼び出し失敗_400エラー(mocker):
@@ -29,7 +27,7 @@ def test_OpenweatherAPIの呼び出し失敗_400エラー(mocker):
     )
 
     with pytest.raises(RuntimeError) as e:
-        repository.get_tomorrow_list()
+        repository.get_daily_pressure()
 
     assert str(e.value) == "パラメータが不正です。"
 
@@ -48,7 +46,7 @@ def test_OpenweatherAPIの呼び出し失敗_404エラー(mocker):
     )
 
     with pytest.raises(RuntimeError) as e:
-        repository.get_tomorrow_list()
+        repository.get_daily_pressure()
 
     assert str(e.value) == "リクエスト先URLが存在しません。"
 
@@ -67,7 +65,7 @@ def test_OpenweatherAPIの呼び出し失敗_403エラー(mocker):
     )
 
     with pytest.raises(RuntimeError) as e:
-        repository.get_tomorrow_list()
+        repository.get_daily_pressure()
 
     assert str(e.value) == "認証に失敗しました。"
 
@@ -86,7 +84,7 @@ def test_OpenweatherAPIの呼び出し失敗_401エラー(mocker):
     )
 
     with pytest.raises(RuntimeError) as e:
-        repository.get_tomorrow_list()
+        repository.get_daily_pressure()
 
     assert str(e.value) == "認証情報が不正です。"
 
@@ -105,7 +103,7 @@ def test_OpenweatherAPIの呼び出し失敗_500エラー(mocker):
     )
 
     with pytest.raises(RuntimeError) as e:
-        repository.get_tomorrow_list()
+        repository.get_daily_pressure()
 
     assert str(e.value) == "OpenWeatherAPIの不具合です。"
 
@@ -113,24 +111,26 @@ def test_OpenweatherAPIの呼び出し失敗_500エラー(mocker):
 def test_OpenweatherAPIの呼び出し成功():
     # 事前準備： 明日の午前6時と21時を定義する
     # 0分が取得されるので、現在時刻は0分とする
+    tommorw_AM0300: datetime = datetime.today().replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ) + timedelta(days=1, hours=3)
+    tommorw_AM0600: datetime = datetime.today().replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ) + timedelta(days=1, hours=6)
 
-    tommorw_AM0600: str = (
-        datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        + timedelta(days=1, hours=6)
-    ).strftime("%Y%m%d%H00")
-    tomorrow_PM2100: str = (
-        datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        + timedelta(days=1, hours=21)
-    ).strftime("%Y%m%d%H00")
+    tomorrow_PM2100: datetime = datetime.today().replace(
+        hour=0, minute=0, second=0, microsecond=0
+    ) + timedelta(days=1, hours=21)
     respository: PressureRepository = PressureRepositoryImpl()
 
     # 操作： OpenweatherAPIを呼び出し
-    response: list = respository.get_tomorrow_list()
+    response: Final[List[Pressure]] = respository.get_daily_pressure()
 
     # 想定結果： listが取得される
     assert isinstance(response, list)
 
     # 現在時刻 ~ 48時間後まで取得される
-    assert response[0]["dt"] == tommorw_AM0600
-    assert response[-1]["dt"] == tomorrow_PM2100
-    assert len(response) == 6
+    assert response[0].datetime == tommorw_AM0300
+    assert response[1].datetime == tommorw_AM0600
+    assert response[-1].datetime == tomorrow_PM2100
+    assert len(response) == 7

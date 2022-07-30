@@ -21,7 +21,7 @@ def test_配列を渡してインスタンス初期化():
     pressure: Pressure = Pressure(datetime(2022, 7, 17, 15, 0, 0), 1000)
     pressure_3hour_ago: Pressure = Pressure(datetime(2022, 7, 17, 12, 0, 0), 995)
     pressure_change: PressureChange = PressureChange(pressure, pressure_3hour_ago)
-    forecast: Forecast = Forecast(datetime.now(), pressure, pressure_change)
+    forecast: Forecast = Forecast(pressure, pressure_change)
 
     # 操作： 配列を引数に渡してインスタンス生成
     forecastlist: List[Forecast] = [forecast]
@@ -39,16 +39,14 @@ def test_配列に要素追加():
     pressure: Pressure = Pressure(datetime(2022, 7, 17, 15, 0, 0), 1000)
     pressure_3hour_ago: Pressure = Pressure(datetime(2022, 7, 17, 12, 0, 0), 995)
     pressure_change: PressureChange = PressureChange(pressure, pressure_3hour_ago)
-    forecast: Forecast = Forecast(datetime.now(), pressure, pressure_change)
+    forecast: Forecast = Forecast(pressure, pressure_change)
 
     added_pressure: Pressure = Pressure(datetime(2022, 7, 17, 18, 0, 0), 1005)
     added_pressure_3hour_ago: Pressure = Pressure(datetime(2022, 7, 17, 15, 0, 0), 995)
     added_pressure_change: PressureChange = PressureChange(
         added_pressure, added_pressure_3hour_ago
     )
-    added_forecast: Forecast = Forecast(
-        datetime.now(), added_pressure, added_pressure_change
-    )
+    added_forecast: Forecast = Forecast(added_pressure, added_pressure_change)
 
     # 事前準備2:  配列を引数に渡してインスタンス生成
     forecastlist: List[Forecast] = [forecast]

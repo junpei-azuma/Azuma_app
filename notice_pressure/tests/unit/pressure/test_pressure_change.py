@@ -8,9 +8,9 @@ from app.pressure import Pressure, PressureChange
     "current_datetime, past_datetime",
     [
         (datetime(2022, 7, 1, 21, 59, 0), datetime(2022, 7, 1, 19, 59, 0)),  # 時間差が2:00
-        (datetime(2022, 7, 1, 21, 59, 0), datetime(2022, 7, 1, 18, 00, 0)),
+        (datetime(2022, 7, 1, 21, 59, 0), datetime(2022, 7, 1, 18, 00, 0)),  # 時間差が3:59
     ],
-)  # 時間差が3:59
+)
 def test_時間差分計算_戻り値が真(current_datetime: datetime, past_datetime: datetime):
     current_pressure: Pressure = Pressure(current_datetime, 1000)
     pressure_ago: Pressure = Pressure(past_datetime, 1005)
@@ -22,13 +22,12 @@ def test_時間差分計算_戻り値が真(current_datetime: datetime, past_dat
     [
         (datetime(2022, 7, 1, 21, 59, 0), datetime(2022, 7, 1, 20, 0, 0)),  # 時間差が1:59
         (datetime(2022, 7, 1, 23, 0, 0), datetime(2022, 6, 30, 19, 0, 0)),  # 時間差が4:00
-        (datetime(2022, 7, 1, 23, 0, 0), datetime(2022, 6, 30, 23, 0, 1)),
+        (datetime(2022, 7, 1, 23, 0, 0), datetime(2022, 6, 30, 23, 0, 1)),  # 過去日時の方が大きい
     ],
-)  # 過去日時の方が大きい
+)
 def test_時間差分計算_戻り値が偽(current_datetime: datetime, past_datetime: datetime):
     current_pressure: Pressure = Pressure(current_datetime, 1000)
     pressure_ago: Pressure = Pressure(past_datetime, 1005)
-    print(current_pressure.datetime - pressure_ago.datetime)
     assert not PressureChange.validate_datetime_difference(
         current_pressure, pressure_ago
     )
@@ -62,8 +61,8 @@ def test_インスタンス生成_異常系():
 
     # 操作： インスタンス生成
     with pytest.raises(ValueError) as e:
-        current_pressure: Pressure = Pressure(datetime(2022, 7, 1, 21, 59, 0), 1000)
-        pressure_3hour_ago: Pressure = Pressure(datetime(2022, 7, 1, 20, 0, 0), 1005)
+        current_pressure: Pressure = Pressure(datetime(2022, 7, 1, 20, 0, 0), 1000)
+        pressure_3hour_ago: Pressure = Pressure(datetime(2022, 7, 1, 21, 0, 0), 1005)
 
         pressure_change: PressureChange = PressureChange(
             current_pressure, pressure_3hour_ago

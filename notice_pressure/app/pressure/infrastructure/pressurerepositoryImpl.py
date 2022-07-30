@@ -15,6 +15,7 @@ import requests
 
 from .converer import Converter
 from ..pressurerepository import PressureRepository
+from app.pressure import Pressure
 
 
 class PressureRepositoryImpl(PressureRepository):
@@ -41,7 +42,7 @@ class PressureRepositoryImpl(PressureRepository):
         )
         return response
 
-    def get_tomorrow_list(self) -> list:
+    def get_daily_pressure(self) -> List[Pressure]:
 
         response: Response = self.call_openweather_api()
 
@@ -64,11 +65,18 @@ class PressureRepositoryImpl(PressureRepository):
 
         extracted_list: Final[List] = Converter.extract(response_object)
         timeconveted_list: Final[List] = Converter.convert_unixtime(extracted_list)
-        # 実行日時翌日の06,09,12,15,18,21時のデータのみを抽出する。
         filterd_by_datetime_list: Final[List] = Converter.filter_by_datetime(
             timeconveted_list
         )
         filterd_by_time_list: Final[List] = Converter.filter_by_time(
             filterd_by_datetime_list
         )
-        return filterd_by_time_list
+
+        daily_pressure: List[Pressure] = [
+            Pressure(
+                datetime.strptime(element["dt"], "%Y%m%d%H%M"), element["pressure"]
+            )
+            for element in filterd_by_time_list
+        ]
+
+        return daily_pressure

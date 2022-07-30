@@ -59,7 +59,6 @@ class PressureChange:
 
         current_datetime: Final[datetime] = current_pressure.datetime
         datetime_3hours_ago: Final[datetime] = pressure_3hour_ago.datetime
-
         time_difference: Final[timedelta] = current_datetime - datetime_3hours_ago
         time_difference_hour: Final[int] = time_difference.seconds // 3600
 

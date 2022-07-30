@@ -101,7 +101,7 @@ class Converter:
             list: _description_
         """
         # 取得対象の時間
-        target_hours: List[int] = [6, 9, 12, 15, 18, 21]
+        target_hours: List[int] = [3, 6, 9, 12, 15, 18, 21]
 
         filtered_by_time_list: Final[List] = [
             element
