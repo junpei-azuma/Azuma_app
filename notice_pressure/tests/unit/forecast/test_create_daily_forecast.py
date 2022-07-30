@@ -1,5 +1,11 @@
 from datetime import datetime
-from http.client import NOT_FOUND
+from http.client import (
+    BAD_REQUEST,
+    FORBIDDEN,
+    INTERNAL_SERVER_ERROR,
+    NOT_FOUND,
+    UNAUTHORIZED,
+)
 from typing import List
 from unittest import mock
 from unittest.mock import Mock
@@ -109,12 +115,22 @@ def test_ユースケース_正常系(mocker):
     assert AM12_forecast.pressure_change.calculate() == -4
 
 
-def test_ユースケース_異常系(mocker):
+@pytest.mark.parametrize(
+    "status, message",
+    [
+        (NOT_FOUND, "リクエスト先URLが存在しません。"),
+        (BAD_REQUEST, "パラメータが不正です。"),
+        (FORBIDDEN, "認証に失敗しました。"),
+        (UNAUTHORIZED, "認証情報が不正です。"),
+        (INTERNAL_SERVER_ERROR, "OpenWeatherAPIの不具合です。"),
+    ],
+)
+def test_ユースケース_異常系(mocker, status: int, message: str):
     # 事前準備：ユースケースクラスのインスタンスを作成
     pressurerepository: PressureRepository = PressureRepositoryImpl()
 
     response: Response = Response()
-    response.status_code = NOT_FOUND
+    response.status_code = status
     mocker.patch.object(
         pressurerepository,
         "call_openweather_api",
@@ -125,4 +141,4 @@ def test_ユースケース_異常系(mocker):
     with pytest.raises(RuntimeError) as e:
         create_daily_forecast.create_forecast()
 
-    assert str(e.value) == "リクエスト先URLが存在しません。"
+    assert str(e.value) == message
