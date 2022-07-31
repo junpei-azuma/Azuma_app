@@ -2,6 +2,7 @@ from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND
 from dotenv import load_dotenv
 import os
 from flask import Flask
+from app.presentation.forecast.forecastview import ForecastView
 
 # from app.presentation.shared.exceptionhandler.notfoundexception import NotFoundException
 # from app.presentation.shared.exceptionhandler.badrequestexception import (
@@ -21,7 +22,7 @@ def create_app():
         app.config.from_envvar("FLASK_CONFIG")
 
     # エンドポイント設定
-    # app.register_blueprint(UserView.user, url_prefix='/api/v1/users/')
+    app.register_blueprint(ForecastView.forecast_route, url_prefix="/api/v1/forecast/")
 
     # エラーハンドリング設定
     # app.register_error_handler(NOT_FOUND, NotFoundException.response)
