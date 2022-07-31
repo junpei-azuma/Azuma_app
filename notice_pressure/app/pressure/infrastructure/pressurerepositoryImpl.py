@@ -10,7 +10,7 @@ import os
 from typing import Final, List
 import json
 
-from requests import Response
+from requests import RequestException, Response
 import requests
 
 from .converer import Converter
@@ -44,22 +44,22 @@ class PressureRepositoryImpl(PressureRepository):
 
     def get_daily_pressure(self) -> List[Pressure]:
 
-        response: Response = self.call_openweather_api()
+        try:
+            response: Response = self.call_openweather_api()
 
-        if response.status_code == NOT_FOUND:
-            raise RuntimeError("リクエスト先URLが存在しません。")
+            if response.status_code == NOT_FOUND:
+                raise RuntimeError("リクエスト先URLが存在しません。")
 
-        if response.status_code == BAD_REQUEST:
-            raise RuntimeError("パラメータが不正です。")
+            if response.status_code == BAD_REQUEST:
+                raise RuntimeError("パラメータが不正です。")
 
-        if response.status_code == FORBIDDEN:
-            raise RuntimeError("認証に失敗しました。")
+            if response.status_code == FORBIDDEN:
+                raise RuntimeError("認証に失敗しました。")
 
-        if response.status_code == UNAUTHORIZED:
-            raise RuntimeError("認証情報が不正です。")
-
-        if response.status_code == INTERNAL_SERVER_ERROR:
-            raise RuntimeError("OpenWeatherAPIの不具合です。")
+            if response.status_code == UNAUTHORIZED:
+                raise RuntimeError("認証情報が不正です。")
+        except RequestException as e:
+            raise RequestException(e)
 
         response_object: dict = json.loads(response.text)
 
