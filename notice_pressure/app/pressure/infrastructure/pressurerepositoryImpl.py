@@ -38,7 +38,8 @@ class PressureRepositoryImpl(PressureRepository):
 
     def call_openweather_api(self) -> Response:
         response: Response = requests.get(
-            f"https://api.openweathermap.org/data/2.5/onecall?lat={self.latitude}&lon={self.longitude}&appid={self.api_token}&lang=ja&exclude=minutely,daily,current,alerts"
+            f"https://api.openweathermap.org/data/2.5/onecall?lat={self.latitude}&lon={self.longitude}&appid={self.api_token}&lang=ja&exclude=minutely,daily,current,alerts",
+            timeout=0.01,
         )
         return response
 

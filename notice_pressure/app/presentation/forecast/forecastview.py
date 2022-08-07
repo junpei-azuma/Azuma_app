@@ -1,5 +1,7 @@
 from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR, OK
 from typing import List
+
+from requests import RequestException
 from app.configration import Dependency
 from flask import Blueprint, jsonify, abort
 from app.forecast import CreateDailyForecast, ForecastDto
@@ -20,8 +22,8 @@ class ForecastView:
         create_forecast: CreateDailyForecast = dependency.resolve(CreateDailyForecast)
         try:
             daily_forecast: List[ForecastDto] = create_forecast.create_forecast()
-        except (RuntimeError) as e:
-            abort(INTERNAL_SERVER_ERROR)
+        except (RuntimeError, RequestException) as e:
+            abort(INTERNAL_SERVER_ERROR, {"message": e})
         except ValueError as e:
             abort(BAD_REQUEST)
 
