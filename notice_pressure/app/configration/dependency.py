@@ -1,10 +1,7 @@
 from typing import Final
 
 from injector import Injector
-from app.user.domain.Iuserrepository import IuserRepository
-from app.user.userrepository import UserRepository
-from app.password.Ipasswordrepository import IpassWordRepository
-from app.password.passwordrepository import PasswordRepository
+from app.pressure import PressureRepository, PressureRepositoryImpl
 
 
 class Dependency:
@@ -13,8 +10,7 @@ class Dependency:
 
     @classmethod
     def config(cls, binder):
-        binder.bind(IuserRepository, UserRepository)
-        binder.bind(IpassWordRepository, PasswordRepository)
+        binder.bind(PressureRepository, PressureRepositoryImpl)
 
     def resolve(self, cls):
         return self.injector.get(cls)

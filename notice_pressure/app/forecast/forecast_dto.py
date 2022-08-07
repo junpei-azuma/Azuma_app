@@ -5,18 +5,6 @@ class ForecastDto:
         Args:
             forecast (Forecast): _description_
         """
-        self.__datetime_str: str = datatime
-        self.__pressure: int = pressure
-        self.__difference: int = pressure_difference
-
-    @property
-    def datetime(self) -> str:
-        return self.__datetime_str
-
-    @property
-    def pressure(self) -> int:
-        return self.__pressure
-
-    @property
-    def difference(self) -> int:
-        return self.__difference
+        self.datetime: str = datatime
+        self.pressure: int = pressure
+        self.difference: int = pressure_difference

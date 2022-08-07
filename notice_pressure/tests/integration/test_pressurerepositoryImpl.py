@@ -9,7 +9,7 @@ from http.client import (
 from typing import Final, List
 from unittest import mock
 import pytest
-from requests import Response
+from requests import RequestException, Response
 from app.pressure import PressureRepositoryImpl, PressureRepository, Pressure
 
 
@@ -98,14 +98,14 @@ def test_OpenweatherAPIの呼び出し失敗_500エラー(mocker):
 
     mocker.patch.object(
         repository,
-        "call_openweather_api",
-        return_value=response_mock,
+        "get_daily_pressure",
+        side_effect=RequestException("外部APIのエラー"),
     )
 
-    with pytest.raises(RuntimeError) as e:
+    with pytest.raises(RequestException) as e:
         repository.get_daily_pressure()
 
-    assert str(e.value) == "OpenWeatherAPIの不具合です。"
+    assert str(e.value) == "外部APIのエラー"
 
 
 def test_OpenweatherAPIの呼び出し成功():

@@ -125,7 +125,6 @@ def test_ユースケース_正常系(mocker):
         (BAD_REQUEST, "パラメータが不正です。"),
         (FORBIDDEN, "認証に失敗しました。"),
         (UNAUTHORIZED, "認証情報が不正です。"),
-        (INTERNAL_SERVER_ERROR, "OpenWeatherAPIの不具合です。"),
     ],
 )
 def test_ユースケース_異常系(mocker, status: int, message: str):
