@@ -1,8 +1,10 @@
 from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND
+import logging.config
 from dotenv import load_dotenv
 import os
 from flask import Flask
 from app.presentation.forecast.forecastview import ForecastView
+from app.configration.logging.dictconfig import LOGGING_CONFIG
 
 # from app.presentation.shared.exceptionhandler.notfoundexception import NotFoundException
 # from app.presentation.shared.exceptionhandler.badrequestexception import (
@@ -29,6 +31,9 @@ def create_app():
     # app.register_error_handler(NOT_FOUND, NotFoundException.response)
     # app.register_error_handler(BAD_REQUEST, BadRequestException.response)
     app.register_error_handler(INTERNAL_SERVER_ERROR, InternalServerErrorHandler.handle)
+
+    # ログ設定
+    logging.config.dictConfig(LOGGING_CONFIG)
     return app
 
 

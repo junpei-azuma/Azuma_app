@@ -1,4 +1,5 @@
 from http.client import INTERNAL_SERVER_ERROR
+import logging
 import os
 import traceback
 from flask import jsonify, current_app
@@ -24,6 +25,7 @@ class InternalServerErrorHandler(Exception):
         Returns:
             _type_: レスポンスのjson
         """
+
         return (
             jsonify({"code": INTERNAL_SERVER_ERROR, "msg": e.description["message"]}),
             INTERNAL_SERVER_ERROR,
@@ -31,10 +33,9 @@ class InternalServerErrorHandler(Exception):
 
     @staticmethod
     def handle(e):
-        # エラー内容を通知する。
-        print(traceback.format_exc())
         # エラーをログに出力する
-
+        # logger = logging.getLogger(__name__)
+        # logger.error(e)
         # レスポンスを返す
 
         return (
