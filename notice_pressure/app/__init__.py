@@ -23,6 +23,10 @@ def create_app():
     if os.getenv("FLASK_CONFIG"):
         app.config.from_envvar("FLASK_CONFIG")
 
+    if os.getenv("FLASK_ENV") == "dev":
+        # ログ設定
+        logging.config.dictConfig(LOGGING_CONFIG)
+
     app.config["JSON_AS_ASCII"] = os.environ.get("JSON_AS_ASCII")
     # エンドポイント設定
     app.register_blueprint(ForecastView.forecast_route, url_prefix="/api/v1/forecast/")
@@ -32,8 +36,6 @@ def create_app():
     # app.register_error_handler(BAD_REQUEST, BadRequestException.response)
     app.register_error_handler(INTERNAL_SERVER_ERROR, InternalServerErrorHandler.handle)
 
-    # ログ設定
-    logging.config.dictConfig(LOGGING_CONFIG)
     return app
 
 
