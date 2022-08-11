@@ -1,4 +1,7 @@
 from logging.config import dictConfig
+import pathlib
+
+log_dir_path = pathlib.Path(__file__).parent.parent.parent.parent / "log/"
 
 LOGGING_CONFIG = {
     "version": 1,
@@ -11,7 +14,7 @@ LOGGING_CONFIG = {
         "file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
             "formatter": "file",
-            "filename": "/usr/local/project/notice_pressure/log/python.log",
+            "filename": log_dir_path / "python.log",
             "level": "ERROR",
             "backupCount": 3,
             "when": "D",
