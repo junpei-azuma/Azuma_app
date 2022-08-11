@@ -1,4 +1,5 @@
 from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR, OK
+import logging
 from typing import List
 
 from requests import RequestException
@@ -18,12 +19,16 @@ class ForecastView:
         Returns:
             _type_: 翌日06~21時の3時間ごとの気圧データ
         """
-        dependency: Dependency = Dependency()
-        create_forecast: CreateDailyForecast = dependency.resolve(CreateDailyForecast)
+        logger = logging.getLogger(__name__)
         try:
+            dependency: Dependency = Dependency()
+            create_forecast: CreateDailyForecast = dependency.resolve(
+                CreateDailyForecast
+            )
             daily_forecast: List[ForecastDto] = create_forecast.create_forecast()
         except (RuntimeError, RequestException) as e:
-            abort(INTERNAL_SERVER_ERROR, {"message": e})
+            logger.error(e)
+            abort(INTERNAL_SERVER_ERROR, e)
         except ValueError as e:
             abort(BAD_REQUEST)
 
