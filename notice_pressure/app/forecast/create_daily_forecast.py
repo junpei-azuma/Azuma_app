@@ -71,7 +71,7 @@ class CreateDailyForecast:
             ForecastDto: ForeCastDTO
         """
         forecast_dto: ForecastDto = ForecastDto(
-            forecast.pressure.datetime.strftime("%Y%m%d%H%M"),
+            forecast.pressure.datetime.strftime("%H:%M"),
             forecast.pressure.value,
             forecast.pressure_change.calculate(),
         )
