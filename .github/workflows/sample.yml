@@ -45,7 +45,7 @@ jobs:
           pip install requests==2.21.0
           pip install pytz==2021.3
           pip install injector==0.19.0 
-          pip install pytest-freezegun=0.4.2
+          pip install pytest-freezegun==0.4.2
       - name: unit test
         run:
           pytest notice_pressure/tests/unit
