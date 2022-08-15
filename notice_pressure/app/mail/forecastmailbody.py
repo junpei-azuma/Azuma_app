@@ -47,6 +47,11 @@ class ForecastMailBody:
 
     @staticmethod
     def _set_headline() -> str:
+        """本文の見出しを作る
+
+        Returns:
+            str: _description_
+        """
         tomorrow: datetime = datetime.now() + timedelta(days=1)
         tommorow_str: str = tomorrow.strftime("%m/%d (%a)")
 
@@ -55,6 +60,14 @@ class ForecastMailBody:
 
     @staticmethod
     def _set_main(daily_forecast: List[dict]) -> str:
+        """本文のメインコンテンツを作る
+
+        Args:
+            daily_forecast (List[dict]):
+
+        Returns:
+            str: _description_
+        """
         forecast: str = ""
         forecast = "\n".join(
             [
