@@ -1,6 +1,7 @@
 # 設定を書きます
 import os
 
+SECRET_KEY = os.getenv("SECRET_KEY")
 OPEN_WEATHER_API_TOKEN = os.getenv("OPEN_WEATHER_API_TOKEN")
 JSON_AS_ASCII = os.getenv("JSON_AS_ASCII")
 DEBUG = os.getenv("DEBUG")

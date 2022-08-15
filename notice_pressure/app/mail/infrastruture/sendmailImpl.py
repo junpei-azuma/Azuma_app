@@ -24,7 +24,7 @@ class SendMailImpl(SendMail):
         Args:
             forecastmailbody (ForecastMailBody): _description_
         """
-        self.message.sender = "azumanotdetail+api@gmail.com"
         self.message.add_recipient("azumanotdetail@gmail.com")
         self.message.body = forecastmailbody
+        self.message.subject = "明日の気圧予想"
         mail.send(self.message)
