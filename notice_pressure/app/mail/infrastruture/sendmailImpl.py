@@ -1,6 +1,7 @@
 from app.mail import SendMail
+
 from app.mail.config import mail
-from flask_mail import Message
+from flask_mail import Message, Mail
 
 
 class SendMailImpl(SendMail):

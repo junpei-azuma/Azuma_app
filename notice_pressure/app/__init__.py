@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from flask import Flask
 from app.presentation.forecast.forecastview import ForecastView
+from app.presentation.mail.mailview import MailView
 from app.configration.logging.dictconfig import LOGGING_CONFIG
 from app.mail.config import init_mail
 from flask_mail import Mail
@@ -33,6 +34,7 @@ def create_app():
 
     # エンドポイント設定
     app.register_blueprint(ForecastView.forecast_route, url_prefix="/api/v1/forecast/")
+    app.register_blueprint(MailView.mail_route, url_prefix="/api/v1/mail/")
 
     # エラーハンドリング設定
     # app.register_error_handler(NOT_FOUND, NotFoundException.response)

@@ -18,9 +18,9 @@ def test_本文見出しを生成():
 
 def test_本文のメインコンテンツを生成():
     daily_forecast: List[dict] = [
-        {"date": "06:00", "pressure": "1000", "difference": "1"},
-        {"date": "09:00", "pressure": "1003", "difference": "3"},
-        {"date": "12:00", "pressure": "1002", "difference": "-1"},
+        {"datetime": "06:00", "pressure": "1000", "difference": "1"},
+        {"datetime": "09:00", "pressure": "1003", "difference": "3"},
+        {"datetime": "12:00", "pressure": "1002", "difference": "-1"},
     ]
 
     main_content: str = ForecastMailBody._set_main(daily_forecast)
@@ -32,9 +32,9 @@ def test_本文のメインコンテンツを生成():
 def test_本文を生成():
     # 事前準備： ForecastMailBodyインスタンスを生成する。
     daily_forecast: List[dict] = [
-        {"date": "06:00", "pressure": "1000", "difference": "1"},
-        {"date": "09:00", "pressure": "1003", "difference": "3"},
-        {"date": "12:00", "pressure": "1002", "difference": "-1"},
+        {"datetime": "06:00", "pressure": "1000", "difference": "1"},
+        {"datetime": "09:00", "pressure": "1003", "difference": "3"},
+        {"datetime": "12:00", "pressure": "1002", "difference": "-1"},
     ]
 
     forecastmailbody: ForecastMailBody = ForecastMailBody(daily_forecast)

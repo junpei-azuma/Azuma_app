@@ -71,7 +71,7 @@ class ForecastMailBody:
         forecast: str = ""
         forecast = "\n".join(
             [
-                f'{element["date"]}: {element["pressure"]}hPa({element["difference"]})'
+                f'{element["datetime"]}: {element["pressure"]}hPa({element["difference"]})'
                 for element in daily_forecast
             ]
         )
