@@ -28,6 +28,7 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       JSON_AS_ASCII: False
       TESTING: True
+      MAIL_DEBUG: 0
     steps:
       - uses: actions/setup-python@v2
         with:
