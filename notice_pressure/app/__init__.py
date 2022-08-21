@@ -23,8 +23,7 @@ def create_app():
     load_dotenv()
     app = Flask(__name__)
 
-    if os.getenv("FLASK_CONFIG"):
-        app.config.from_envvar("FLASK_CONFIG")
+    app.config.from_pyfile("configration/config.py")
 
     if os.getenv("FLASK_ENV") == "dev":
         # ログ設定
