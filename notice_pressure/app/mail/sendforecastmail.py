@@ -4,13 +4,15 @@ from typing import List
 from injector import inject
 from .sendmail import SendMail
 from .forecastmailbody import ForecastMailBody
+from ..forecast import CreateDailyForecast, ForecastDto
 import requests
 
 
 class SendForecastMail:
     @inject
-    def __init__(self, sendmail: SendMail):
+    def __init__(self, sendmail: SendMail, createdailyforecast: CreateDailyForecast):
         self.sendmail: SendMail = sendmail
+        self.createdailyforecast: CreateDailyForecast = createdailyforecast
 
     def send(self) -> None:
         """予報メールを送信するユースケース
@@ -35,15 +37,21 @@ class SendForecastMail:
         Returns:
             List[dict]: 予報データ
         """
-        response: requests.Response = requests.get(
-            "http://localhost:5000/api/v1/forecast/"
-        )
 
-        if response.status_code != OK:
-            raise RuntimeError("気圧情報の取得に失敗しました。")
+        forecast_dto: List[ForecastDto] = self.createdailyforecast.create_forecast()
+        forecast_data: List[dict] = [element.__dict__ for element in forecast_dto]
+        forecast_data_dict: dict = {"forecast": forecast_data}
 
-        # jsonをdictに変換してforecastを取り出す
-        response_dict: dict = json.loads(response.text)
+        # response_dict: dict = {
+        #     "forecast": [
+        #         {"datetime": "06:00", "difference": 0, "pressure": 1005},
+        #         {"datetime": "09:00", "difference": 1, "pressure": 1006},
+        #         {"datetime": "12:00", "difference": -2, "pressure": 1004},
+        #         {"datetime": "15:00", "difference": 0, "pressure": 1004},
+        #         {"datetime": "18:00", "difference": 1, "pressure": 1005},
+        #         {"datetime": "21:00", "difference": 1, "pressure": 1006},
+        #     ]
+        # }
         # 取り出したリストを返す
-        forecast_data: List[dict] = response_dict["forecast"]
+        forecast_data: List[dict] = forecast_data_dict["forecast"]
         return forecast_data

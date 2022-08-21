@@ -1,8 +1,8 @@
 from typing import Final
 
 from injector import Injector
-from app.pressure import PressureRepository, PressureRepositoryImpl
-from app.mail import SendMail, SendMailImpl
+from ..pressure import PressureRepository, PressureRepositoryImpl
+from ..mail import SendMail, SendMailImpl
 
 
 class Dependency:

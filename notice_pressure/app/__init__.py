@@ -3,17 +3,17 @@ import logging.config
 from dotenv import load_dotenv
 import os
 from flask import Flask
-from app.presentation.forecast.forecastview import ForecastView
-from app.presentation.mail.mailview import MailView
-from app.configration.logging.dictconfig import LOGGING_CONFIG
-from app.mail.config import init_mail
+from .presentation.forecast.forecastview import ForecastView
+from .presentation.mail.mailview import MailView
+from .configration.logging.dictconfig import LOGGING_CONFIG
+from .mail.config import init_mail
 from flask_mail import Mail
 
 # from app.presentation.shared.exceptionhandler.notfoundexception import NotFoundException
 # from app.presentation.shared.exceptionhandler.badrequestexception import (
 #     BadRequestException,
 # )
-from app.presentation.shared.exceptionhandler.internalservererrorhandler import (
+from .presentation.shared.exceptionhandler.internalservererrorhandler import (
     InternalServerErrorHandler,
 )
 

@@ -9,9 +9,9 @@ import pytest
 def test_メール送信():
     # 事前準備： メール本文インスタンスを生成する。
     daily_forecast: List[dict] = [
-        {"date": "06:00", "pressure": "1000", "difference": "1"},
-        {"date": "09:00", "pressure": "1003", "difference": "3"},
-        {"date": "12:00", "pressure": "1002", "difference": "-1"},
+        {"datetime": "06:00", "pressure": "1000", "difference": "1"},
+        {"datetime": "09:00", "pressure": "1003", "difference": "3"},
+        {"datetime": "12:00", "pressure": "1002", "difference": "-1"},
     ]
     forecastmailbody: ForecastMailBody = ForecastMailBody(daily_forecast)
     body: str = forecastmailbody.compose()
