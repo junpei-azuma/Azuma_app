@@ -1,7 +1,8 @@
 from typing import Final
 
 from injector import Injector
-from app.pressure import PressureRepository, PressureRepositoryImpl
+from ..pressure import PressureRepository, PressureRepositoryImpl
+from ..mail import SendMail, SendMailImpl
 
 
 class Dependency:
@@ -11,6 +12,7 @@ class Dependency:
     @classmethod
     def config(cls, binder):
         binder.bind(PressureRepository, PressureRepositoryImpl)
+        binder.bind(SendMail, SendMailImpl)
 
     def resolve(self, cls):
         return self.injector.get(cls)

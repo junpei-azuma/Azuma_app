@@ -7,4 +7,5 @@ from app import create_app
 @pytest.fixture(scope="session", autouse=True)
 def set_config():
     app = create_app()
+    app.config["TESTING"] = True
     app.app_context().push()

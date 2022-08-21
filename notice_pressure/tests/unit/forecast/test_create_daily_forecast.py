@@ -99,13 +99,13 @@ def test_ユースケース_正常系(mocker):
     AM06_forecast: ForecastDto = daily_forecast[0]
     isinstance(AM06_forecast, ForecastDto)
     assert AM06_forecast.pressure == 1000
-    assert AM06_forecast.datetime == "202207250600"
+    assert AM06_forecast.datetime == "06:00"
     assert AM06_forecast.difference == -1
 
     ## AM09時の予報
     AM09_forecast: ForecastDto = daily_forecast[1]
     isinstance(AM09_forecast, ForecastDto)
-    assert AM09_forecast.datetime == "202207250900"
+    assert AM09_forecast.datetime == "09:00"
     assert AM09_forecast.pressure == 1005
     assert AM09_forecast.difference == 5
 
@@ -113,7 +113,7 @@ def test_ユースケース_正常系(mocker):
     AM12_forecast: ForecastDto = daily_forecast[2]
     isinstance(AM12_forecast, ForecastDto)
 
-    assert AM12_forecast.datetime == "202207251200"
+    assert AM12_forecast.datetime == "12:00"
     assert AM12_forecast.pressure == 1001
     assert AM12_forecast.difference == -4
 
