@@ -76,7 +76,8 @@ jobs:
         run: |
           pytest notice_pressure/tests/integration
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          #SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SECRET_KEY: "jrijse90ym4wyp8ww4u9"
           OPEN_WEATHER_API_TOKEN: ${{ secrets.OPEN_WEATHER_API_TOKEN }}
           JSON_AS_ASCII: False
           TESTING: True
