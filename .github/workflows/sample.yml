@@ -82,6 +82,7 @@ jobs:
           TESTING: True
           TZ: 'Asia/Tokyo'
           MAIL_SERVER: 'smtp.sendgrid.net'
+          MAIL_DEBUG: False
           MAIL_PORT: 587
           MAIL_USE_TLS: True
           MAIL_USE_SSL: false
